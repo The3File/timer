@@ -2,7 +2,7 @@
 
 simple timer written in bash
 
-# installation
+## installation
 
 ```
 git clone https://github.com/The3File/timer.git
