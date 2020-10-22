@@ -42,12 +42,12 @@ bell(){
 
 play_bell(){
 	bell="/usr/share/sounds/freedesktop/stereo/alarm-clock-elapsed.oga"
-	coproc paplay $bell
+	coproc paplay $bell &>/dev/null
 }
 
 kill_bell(){
 	read -rsn1
-	kill -9 $COPROC_PID
+	kill -9 $COPROC_PID &>/dev/null
 	wait $_ &>/dev/null
 }
 
