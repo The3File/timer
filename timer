@@ -29,10 +29,10 @@ parse_colons(){
 	h="${_%:}"
 }
 
-completed(){
+notify_complete(){
 	printf '\r\e[K%s\e[m\n' "times up!"
 	notify-send "${0//$HOME/\~}: $_"
-	bell
+	bell &>/dev/null
 }
 
 bell(){
@@ -41,23 +41,22 @@ bell(){
 }
 
 play_bell(){
-	bell="/usr/share/sounds/freedesktop/stereo/alarm-clock-elapsed.oga"
-	coproc paplay $bell &>/dev/null
+	bell_dir="/usr/share/sounds/freedesktop/stereo"
+	bell="${bell_dir}/alarm-clock-elapsed.oga"
+	coproc paplay $bell
 }
 
 kill_bell(){
 	read -rsn1
-	kill -9 $COPROC_PID &>/dev/null
-	wait $_ &>/dev/null
+	kill -9 $COPROC_PID
+	wait $_
 }
 
 timer(){ 
-	disable_cursor; start_time=$SECONDS
-	for ((;;)) {
-		((time=SECONDS,seconds=${c:+$c-}(time-start_time)))
-		printf '\e[1;34m\r\e[K%02d:%02d:%02d' "$((seconds/3600))"\
-			"$((seconds/60%60))" "$((seconds%60))"
-		[[ $seconds -lt 0 ]] && { completed; break; }
+	for ((st=SECONDS;s>0;t=SECONDS)) {
+		((s=${c:+$c-}(t-st)))
+		printf '\e[1;34m\r\e[K%02d:%02d:%02d'\
+			"$((s/3600))" "$((s/60%60))" "$((s%60))"
 		sleep 1
 	}
 }
@@ -66,7 +65,7 @@ get_opts(){
 	while [ $1 ]; do
 		case $1 in
 			*[0-9]':'[0-9][0-9]) parse_colons $1
-						  ((c+=(h*3600)+(m*60)+s)) ;;
+				((c+=(h*3600)+(m*60)+s)) ;;
 			*[0-9]'h') ((c+=${1%h}*3600)) ;;
 			*[0-9]'m') ((c+=${1%m}*60)) ;;
 			*[0-9]'s') ((c+=${1%s})) ;;
@@ -80,7 +79,9 @@ main(){
 	trap "reset_cursor" EXIT
 	basename="${0##*/}"
 	get_opts "$@"
+	disable_cursor
 	timer
+	notify_complete
 }
 
 main "$@"
