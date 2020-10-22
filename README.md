@@ -2,8 +2,14 @@
 
 simple timer written in bash
 
-## installation
+## usage
 
+```
+timer [ARGUMENTS] ...
+```
+
+## installation
+depends on pulseaudio for bell sound
 ```
 git clone https://github.com/The3File/timer.git
 cd timer
