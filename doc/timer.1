@@ -1,40 +1,47 @@
 ./" this is a manpage for timer
-.TH timer 1 "2020-10-22" "written by the3file"
-
+.TH TIMER 1 "2020-10-22" "GNU"
 .SH NAME
-timer
+.P
+timer - allthough time is an illusion
+.PP
 
 .SH SYNOPSIS
-.EX
-timer [ARGUMENTS] ...\n
-timer <number>h|m|s ...\n
-timer [<number>:]<number>:<number>
-.EE
+.P
+.B timer \fR[\fIARGUMENT\fR]...
+.PP
 
 .SH DESCRIPTION
-.PP
-Simple timer for measuring time.\n
 .P
+Simple timer for measuring time.
+.PP
+
+.SH ARGUMENTS
+.TP
+.B <number>h|m|s
+Set time. Integer followed by specifyer. Multiple can be specified.
+.TP
+.B [<hours>:]<minutes>:<seconds>
+Set time. Colon separated. Multiple can be specified.
+.PP
 
 .SH EXAMPLES
+.TP
+.B timer\~\fR1\fI:\fR09
+.TQ
+.B timer\~\fR1\fIm\fR\~9\fIs\fR
+.TQ
+.B timer\~\fR69\fIs\fR
+Set a timer for 1 minute and 9 seconds
+.TP
+.B timer\~\fR4\fIh\~\fR20\fIm
+.TQ
+.B timer\~\fR4\fI:\fR20\fI:\fR00
+Set a timer for for 4 hours and 20 minutes
+.TP
+.B timer\~\fR0\fIh\fR\~2\fI:\fR03\~4\fIs\fR\~2\fIs\fR
+If you want to be stupid
 
-.EX
-timer 69s\n
-timer 1m 9s\n
-timer 1:09
-.EE
-
-	to set a timer for 1 minute and 9 seconds
-
-.EX
-timer 4h 20m\n
-timer 4:20:00
-.EE
-
-	to set a timer for for 4 hours and 20 minutes
-
-.EX
-timer 0h 2:03 4s 2s
-.EE
-
-	if you want to be stupid
+.SH SEE ALSO
+Github repo:
+.br
+https://www.github.com/The3File/timer
