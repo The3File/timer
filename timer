@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# simple timer written in bash
+# a timer for measuring time
 # https://github.com/the3file
 
 usage(){ 
-   cat >&2 <<-EOF
+	cat >&2 <<-EOF
 		$basename: $1: invalid argument
 		usage: $basename [<hrs|mins|secs>{h|m|s}] [[<hrs>:]<mins>:<secs>]
 	EOF
@@ -66,7 +66,7 @@ get_opts(){
 	while [ $1 ]; do
 		case $1 in
 			*[0-9]':'[0-9][0-9]) parse_colons $1
-						  ((c=(h*3600)+(m*60)+s)) ;;
+						  ((c+=(h*3600)+(m*60)+s)) ;;
 			*[0-9]'h') ((c+=${1%h}*3600)) ;;
 			*[0-9]'m') ((c+=${1%m}*60)) ;;
 			*[0-9]'s') ((c+=${1%s})) ;;
