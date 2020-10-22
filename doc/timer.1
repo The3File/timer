@@ -1,0 +1,40 @@
+./" this is a manpage for timer
+.TH timer 1 "2020-10-22" "written by the3file"
+
+.SH NAME
+timer
+
+.SH SYNOPSIS
+.EX
+timer [ARGUMENTS] ...\n
+timer <number>h|m|s ...\n
+timer [<number>:]<number>:<number>
+.EE
+
+.SH DESCRIPTION
+.PP
+Simple timer for measuring time.\n
+.P
+
+.SH EXAMPLES
+
+.EX
+timer 69s\n
+timer 1m 9s\n
+timer 1:09
+.EE
+
+	to set a timer for 1 minute and 9 seconds
+
+.EX
+timer 4h 20m\n
+timer 4:20:00
+.EE
+
+	to set a timer for for 4 hours and 20 minutes
+
+.EX
+timer 0h 2:03 4s 2s
+.EE
+
+	if you want to be stupid

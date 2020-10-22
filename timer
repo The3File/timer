@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+# simple timer written in bash
+# https://github.com/the3file
+
+usage(){ 
+   cat >&2 <<-EOF
+		$basename: $1: invalid argument
+		usage: $basename [<hrs|mins|secs>{h|m|s}] [[<hrs>:]<mins>:<secs>]
+	EOF
+}
+
+disable_cursor(){
+	stty -echo
+	printf '\e[?25l'
+}
+
+reset_cursor(){
+	stty echo
+	printf '\e[?25h'
+}
+
+parse_colons(){
+	s="${1##*:}"
+
+	: "${1%%:$s}"
+	m="${_##*:}"
+
+	: "${1%%$m:$s}"
+	h="${_%:}"
+}
+
+completed(){
+	printf '\r\e[K%s\e[m\n' "times up!"
+	notify-send "${0//$HOME/\~}: $_"
+	bell
+}
+
+bell(){
+	play_bell
+	kill_bell
+}
+
+play_bell(){
+	bell="/usr/share/sounds/freedesktop/stereo/alarm-clock-elapsed.oga"
+	coproc paplay $bell
+}
+
+kill_bell(){
+	read -rsn1
+	kill -9 $COPROC_PID
+	wait $_ &>/dev/null
+}
+
+timer(){ 
+	disable_cursor; start_time=$SECONDS
+	for ((;;)) {
+		((time=SECONDS,seconds=$count_down(time-start_time)))
+		printf '\e[1;34m\r\e[K%02d:%02d:%02d' "$((seconds/3600))"\
+			"$((seconds/60%60))" "$((seconds%60))"
+		[[ $seconds -lt 0 ]] && { completed; break; }
+		sleep 1
+	}
+}
+
+get_opts(){
+	while [ $1 ]; do
+		case $1 in
+			*[0-9]':'[0-9][0-9]) parse_colons $1
+						  ((count_down=(h*3600)+(m*60)+s)) ;;
+			*[0-9]'h') ((count_down+=${1%h}*3600)) ;;
+			*[0-9]'m') ((count_down+=${1%m}*60)) ;;
+			*[0-9]'s') ((count_down+=${1%s})) ;;
+			'') count_down="" ;;
+			*) usage "$1"; exit 1
+		esac; shift
+	done
+	[[ $count_down ]] && count_down+="-"
+}
+
+main(){
+	trap "reset_cursor" EXIT
+	basename="${0##*/}"
+	get_opts "$@"
+	timer
+}
+
+main "$@"
