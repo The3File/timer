@@ -23,4 +23,4 @@ sudo make install
 - coreutils
 - pulseaudio
 
-Depends on pulseaudio for the bell sound for now, might add alsa support, but I don't use alsa, so create an issue if someone really wants that.
+Depends on pulseaudio for the bell sound for now, might add alsa support, but I don't use alsa, so create an issue if you really want that.
