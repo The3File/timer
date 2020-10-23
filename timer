@@ -30,7 +30,7 @@ parse_colons(){
 }
 
 notify_complete(){
-	printf '\a\r\e[K%s\e[m\n' "times up!"
+	printf '\r\e[K%s\e[m\n' "times up!"
 	notify-send "${0//$HOME/\~}: $_"
 	play_bell &>/dev/null
 }
