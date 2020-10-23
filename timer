@@ -32,12 +32,7 @@ parse_colons(){
 notify_complete(){
 	printf '\a\r\e[K%s\e[m\n' "times up!"
 	notify-send "${0//$HOME/\~}: $_"
-	bell &>/dev/null
-}
-
-bell(){
-	play_bell
-	kill_bell
+	play_bell &>/dev/null
 }
 
 play_bell(){
@@ -47,17 +42,15 @@ play_bell(){
 }
 
 kill_bell(){
-	read -r
+	[[ $COPROC_PID ]] || return
 	kill -9 $COPROC_PID
-	wait $_
+	wait $_ &>/dev/null
 }
 
 timer(){ 
-	for ((st=SECONDS;;t=SECONDS,)) {
-		((s=${c:+$c-}(t-st)))
+	for ((st=SECONDS,s=c;s>=0;s=c?c-(SECONDS-st):SECONDS-st)){
 		printf '\e[1;34m\r\e[K%02d:%02d:%02d'\
 			"$((s/3600))" "$((s/60%60))" "$((s%60))"
-		((s>=0)) || break
 		sleep 1
 	}
 }
@@ -70,14 +63,13 @@ get_opts(){
 			*[0-9]'h') ((c+=${1%h}*3600)) ;;
 			*[0-9]'m') ((c+=${1%m}*60)) ;;
 			*[0-9]'s') ((c+=${1%s})) ;;
-			'') c="" ;;
 			*) usage "$1"; exit 1
 		esac; shift
 	done
 }
 
 main(){
-	trap "reset_cursor" EXIT
+	trap "kill_bell; reset_cursor" EXIT
 	basename="${0##*/}"
 	get_opts "$@"
 	disable_cursor
