@@ -3,20 +3,11 @@
 # https://github.com/the3file
 
 usage(){ 
-	cat >&2 <<-EOF
+	cat >&2 <<-END
 		$basename: $1: invalid argument
 		usage: $basename [<hrs|mins|secs>{h|m|s}] [[<hrs>:]<mins>:<secs>]
-	EOF
-}
-
-disable_cursor(){
-	stty -echo
-	printf '\e[?25l'
-}
-
-reset_cursor(){
-	stty echo
-	printf '\e[?25h'
+	END
+	exit 1
 }
 
 parse_colons(){
@@ -38,43 +29,35 @@ notify_complete(){
 play_bell(){
 	bell_dir="/usr/share/sounds/freedesktop/stereo"
 	bell="${bell_dir}/alarm-clock-elapsed.oga"
-	coproc paplay $bell
+	paplay $bell
 }
 
-kill_bell(){
-	[[ $COPROC_PID ]] || return
-	kill -9 $COPROC_PID
-	wait $_ &>/dev/null
-}
-
-timer(){ 
-	for ((st=SECONDS,s=c;s>=0;s=c?c-(SECONDS-st):SECONDS-st)){
-		printf '\e[1;34m\r\e[K%02d:%02d:%02d'\
-			"$((s/3600))" "$((s/60%60))" "$((s%60))"
+timer(){
+	stty -echo; printf '\e[?25l'
+	for ((st=seconds,s=c;s>=0;t=SECONDS,s=c?c-(t-st):t-st)); do
+		printf '\e[1;34m\r%02d:%02d:%02d' "$((s/3600))" "$((s/60%60))" "$((s%60))"
 		sleep 1
-	}
+	done
 }
 
 get_opts(){
+	basename="${0##*/}"
 	while [ $1 ]; do
 		case $1 in
-			*[0-9]':'[0-9][0-9]) parse_colons $1
+			*[0-9]':'[0-9][0-9]) parse_colons "$1"
 				((c+=(h*3600)+(m*60)+s)) ;;
 			*[0-9]'h') ((c+=${1%h}*3600)) ;;
 			*[0-9]'m') ((c+=${1%m}*60)) ;;
 			*[0-9]'s') ((c+=${1%s})) ;;
-			*) usage "$1"; exit 1
+			*) usage "$1"
 		esac; shift
 	done
 }
 
 main(){
-	trap "kill_bell; reset_cursor" EXIT
-	basename="${0##*/}"
+	trap "stty echo; printf '\e[?25h'" EXIT
 	get_opts "$@"
-	disable_cursor
-	timer
-	notify_complete
+	timer; notify_complete
 }
 
 main "$@"
