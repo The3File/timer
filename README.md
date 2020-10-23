@@ -6,12 +6,15 @@ simple timer written in bash
 
 full documentation is in the man page
 
-``` timer [ARGUMENTS] ...  ```
+``` bash
+timer [ARGUMENTS] ...
+```
+
 ## installation
 `make` installs to `/usr/local` by default.
 Install with `make PREFIX=/some/other/path` to change this. 
 
-```
+``` bash
 git clone https://github.com/The3File/timer.git
 cd timer
 sudo make install
