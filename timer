@@ -53,7 +53,7 @@ kill_bell(){
 }
 
 timer(){ 
-	for ((st=SECONDS;;t=SECONDS)) {
+	for ((st=SECONDS;;t=SECONDS,)) {
 		((s=${c:+$c-}(t-st)))
 		printf '\e[1;34m\r\e[K%02d:%02d:%02d'\
 			"$((s/3600))" "$((s/60%60))" "$((s%60))"
