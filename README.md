@@ -7,7 +7,7 @@ a timer for measuring time in `55` lines of pure bash
 * simple (*no options, nothing to remember*)
 * *almost* no dependencies (*`pulseaudio` for sound, though*)
 * small (*only `55` lines of code*)
-* takes arguments as if it were **candy**
+* takes arguments as if they were **candy**
 
 ## usage
 
@@ -33,8 +33,7 @@ sudo make install
 
 ## dependencies
 
-depends on `pulseaudio` for the bell sound for now, might add alsa support,
-but i have no need for it, so create an issue if you really want that.
+depends on `pulseaudio` for a *"higher"* quality bell sound, but uses the built-in terminal bell as a fallback.
 
 * `bash`
 * ~~`coreutils`~~
