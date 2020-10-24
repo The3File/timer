@@ -6,7 +6,7 @@ a timer for measuring time in `55` lines of pure bash
 
 * simple (*no options, nothing to remember*)
 * *almost* no dependencies (*`pulseaudio` for sound, though*)
-* small (*only `~50` lines of code*)
+* small (*only `55` lines of code*)
 * takes arguments as if it were **candy**
 
 ## usage
