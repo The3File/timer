@@ -1,6 +1,6 @@
 # timer
 
-a timer for measuring time in `55` lines of pure bash
+a timer for measuring time in *`55`* lines of pure bash
 
 ## advantages
 
@@ -11,6 +11,8 @@ a timer for measuring time in `55` lines of pure bash
 
 ## usage
 
+find examples in the man page
+
 ``` bash
 timer [ARGUMENTS] ...
 
@@ -18,18 +20,16 @@ timer [<number>{h|m|s}]
 timer [[<hours>:]<minutes>:<seconds>]
 ```
 
-> find examples in the man page
-
 ## installation
+
+`make` installs to `/usr/local` by default.
+Install with `make PREFIX=/some/other/path` to change this. 
 
 ``` bash
 git clone https://github.com/The3File/timer.git
 cd timer
 sudo make install
 ```
-
-`make` installs to `/usr/local` by default.
-Install with `make PREFIX=/some/other/path` to change this. 
 
 ## dependencies
 
@@ -40,4 +40,5 @@ Install with `make PREFIX=/some/other/path` to change this.
 depends on `pulseaudio` for the bell sound for now, might add alsa support,
 but i have no need for it, so create an issue if you really want that.
 
-> thanks to the [pure-bash-bible](http://github.com/dylanaraps/pure-bash-bible)
+## links
+http://github.com/dylanaraps/pure-bash-bible
