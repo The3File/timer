@@ -16,14 +16,18 @@ clean_exit(){
 
 parse_colons(){
 	s="${1##*:}"
-	: "${1%%:$s}"; m="${_##*:}"
-	: "${1%%$m:$s}"; h="${_%:}"
+
+	: "${1%%:$s}"
+	m="${_##*:}"
+
+	: "${1%%$m:$s}"
+	h="${_%:}"
 }
 
 notify_complete(){
 	printf '\a\r\e[K%s\e[m\n\e[?25h' "times up!"
 	notify-send "${0//$HOME/\~}: $_"
-	bell; read -rs; exit 0
+	bell; exit 0
 }
 
 bell(){
@@ -37,10 +41,11 @@ play_bell(){
 		trap 'kill -9 $p' EXIT
 		paplay $bell & p=$!
 	done & bell_pid=$!
+	read -rs
 }
 
 print_time(){
-	printf '\e[1;34m\r%02d:%02d:%02d' "$((s/3600))" "$((s/60%60))" "$((s%60))"
+	printf '\e[?25l\e[1;34m\r%02d:%02d:%02d' "$((s/3600))" "$((s/60%60))" "$((s%60))"
 	read -st 1
 }
 
@@ -60,7 +65,6 @@ get_opts(){
 main(){
 	get_opts "$@"
 	trap 'clean_exit' EXIT
-	printf '\e[?25l'
 	for ((st=seconds,s=c;s>=0;t=SECONDS,s=c?c-(t-st):t-st)){ print_time;}
 	notify_complete
 }
