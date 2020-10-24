@@ -1,6 +1,6 @@
 # timer
 
-a timer for measuring time in 55 lines of pure bash
+a timer for measuring time in *`55`* lines of pure bash
 
 ## advantages
 
@@ -41,4 +41,4 @@ depends on `pulseaudio` for the bell sound for now, might add alsa support,
 but i have no need for it, so create an issue if you really want that.
 
 ## links
-[pure-bash-bible](http://github.com/dylanaraps/pure-bash-bible)
+http://github.com/dylanaraps/pure-bash-bible
