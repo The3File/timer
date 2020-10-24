@@ -27,21 +27,13 @@ parse_colons(){
 notify_complete(){
 	printf '\r\e[K%s\e[m\n' "times up!"
 	notify-send "$basename: $_"
-	bell
+	play_sound || for i in {0..3}{ read -st .15 -p $'\a'; }
 }
 
-bell(){
-	bell_dir="/usr/share/sounds/freedesktop/stereo"
-	bell="${bell_dir}/alarm-clock-elapsed.oga"
-	command -v paplay &>/dev/null && play_bell
-	for i in {0..3};{ read -st .15 -p $'\a'; }
-}
-
-play_bell(){
-	while wait; do
-		trap 'kill -9 $p' EXIT
-		paplay $bell & p=$!
-	done & bell_pid=$!
+play_sound(){
+	command -v paplay &>/dev/null || return 1
+	sounds_dir="/usr/share/sounds/freedesktop/stereo/alarm-clock-elapsed.oga"
+	for ((;;)){ trap 'kill -9 $p' EXIT; paplay $sound & p=$!; wait;} & bell_pid=$!
 	read -rs; exit 0
 }
 
