@@ -2,6 +2,8 @@
 # a timer for measuring time - written in pure bash
 # https://github.com/the3file
 
+clean_exit(){ [[ $bell ]] && kill $bell; printf '\e[?25h'; }
+
 usage(){ 
 	cat >&2 <<-END
 		$basename: $1: invalid argument
@@ -9,31 +11,16 @@ usage(){
 	END
 }
 
-clean_exit(){
-	printf '\e[?25h'
-	[[ $bell_pid ]] && kill $bell_pid
-}
-
-parse_colons(){
-	s="${1##*:}"
-
-	: "${1%%:$s}"
-	m="${_##*:}"
-
-	: "${1%%$m:$s}"
-	h="${_%:}"
-}
-
 notify_complete(){
 	printf '\r\e[K%s\e[m\n' "times up!"
 	notify-send "$basename: $_"
-	play_sound || for i in {0..3}{ read -st .15 -p $'\a'; }
+	play_sound || for i in {0..3};{ read -st .15 -p $'\a';}
 }
 
 play_sound(){
 	command -v paplay &>/dev/null || return 1
-	sounds_dir="/usr/share/sounds/freedesktop/stereo/alarm-clock-elapsed.oga"
-	for ((;;)){ trap 'kill -9 $p' EXIT; paplay $sound & p=$!; wait;} & bell_pid=$!
+	sound="/usr/share/sounds/freedesktop/stereo/alarm-clock-elapsed.oga"
+	while wait;do trap 'kill -9 $p' EXIT; paplay $sound & p=$!; done & bell=$!
 	read -rs; exit 0
 }
 
@@ -41,6 +28,8 @@ print_time(){
 	printf '\e[?25l\e[1;34m\r%02d:%02d:%02d' "$((s/3600))" "$((s/60%60))" "$((s%60))"
 	read -st 1
 }
+
+parse_colons(){ s="${1##*:}";: "${1%%:$s}"; m="${_##*:}";: "${1%%$m:$s}"; h="${_%:}"; }
 
 get_opts(){
 	basename="${0##*/}"
