@@ -1,6 +1,6 @@
 # timer
 
-a timer for measuring time in *`55`* lines of pure bash
+a timer for measuring time in `55` lines of pure bash
 
 ## advantages
 
@@ -11,7 +11,7 @@ a timer for measuring time in *`55`* lines of pure bash
 
 ## usage
 
-find examples in the man page
+find examples in the `man` page
 
 ``` bash
 timer [ARGUMENTS] ...
@@ -39,6 +39,13 @@ but i have no need for it, so create an issue if you really want that.
 * `bash`
 * ~~`coreutils`~~
 * `pulseaudio`
+
+## notes
+
+this was a project, mostly for me to learn git, and get better at bash (*becase it's important*),
+as much as i needed a timer.
+
+if you find it useful, feel free to use it as you please ¯\\\_(ツ)\_/¯
 
 ## links
 http://github.com/dylanaraps/pure-bash-bible
