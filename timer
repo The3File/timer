@@ -25,7 +25,7 @@ parse_colons(){
 }
 
 notify_complete(){
-	printf '\a\r\e[K%s\e[m\n\e[?25h' "times up!"
+	printf '\r\e[K%s\e[m\n' "times up!"
 	notify-send "${0//$HOME/\~}: $_"
 	bell
 }
@@ -34,7 +34,7 @@ bell(){
 	bell_dir="/usr/share/sounds/freedesktop/stereo"
 	bell="${bell_dir}/alarm-clock-elapsed.oga"
 	command -v paplay &>/dev/null && play_bell
-	for i in {0..3};{ printf '\a'; read -t .15; }
+	for i in {0..3};{ read -st .15 -p $'\a'; }
 }
 
 play_bell(){
