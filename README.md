@@ -1,15 +1,12 @@
 # timer
-
-a timer for measuring time in *`~50`* lines of pure bash
+a timer for measuring time in bash
 
 ## advantages
-
 * *almost* no dependencies (*`pulseaudio` for more fancy sound*)
-* small (*only `~50` lines of code*)
+* small (*only `~40` lines of code*)
 * takes arguments as if they were **candy**
 
 ## usage
-
 find examples in the `man` page
 
 ``` bash
@@ -20,7 +17,6 @@ timer [[<hours>:]<minutes>:<seconds>]
 ```
 
 ## installation
-
 `make` installs to `/usr/local` by default.
 Install with `make PREFIX=/some/other/path` to change this. 
 
@@ -31,15 +27,13 @@ sudo make install
 ```
 
 ## dependencies
-
 depends on `pulseaudio` for a *"higher"* quality bell sound, but uses the built-in terminal bell as a fallback.
 
 * `bash 4+`
 * ~~`coreutils`~~
-* `pulseaudio`
+* `pulseaudio` (optional)
 
 ## notes
-
 this was a project, mostly for me to learn git, and get better at bash (*becase it's important*),
 as much as i needed a timer.
 
