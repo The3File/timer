@@ -33,8 +33,7 @@ sudo make install
 
 ## dependencies
 
-depends on `pulseaudio` for the bell sound for now, might add alsa support,
-but i have no need for it, so create an issue if you really want that.
+depends on `pulseaudio` for the bell sound for now,  but uses the terminal bell as a fallback.
 
 * `bash`
 * ~~`coreutils`~~
