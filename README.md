@@ -1,6 +1,6 @@
 # timer
 
-a timer for measuring time in `55` lines of pure bash
+a timer for measuring time in 55 lines of pure bash
 
 ## advantages
 
