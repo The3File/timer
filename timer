@@ -34,7 +34,7 @@ bell(){
 	bell_dir="/usr/share/sounds/freedesktop/stereo"
 	bell="${bell_dir}/alarm-clock-elapsed.oga"
 	command -v paplay &>/dev/null && play_bell
-	for i in {0..10};{ printf '\a'; read -t .1; }
+	for i in {0..3};{ printf '\a'; read -t .15; }
 }
 
 play_bell(){
