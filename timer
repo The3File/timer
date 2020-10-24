@@ -7,57 +7,62 @@ usage(){
 		$basename: $1: invalid argument
 		usage: $basename [<hrs|mins|secs>{h|m|s}] [[<hrs>:]<mins>:<secs>]
 	END
-	exit 1
+}
+
+clean_exit(){
+	stty echo; printf '\e[?25h'
+	[[ $bell_pid ]] && kill $bell_pid
 }
 
 parse_colons(){
 	s="${1##*:}"
-
-	: "${1%%:$s}"
-	m="${_##*:}"
-
-	: "${1%%$m:$s}"
-	h="${_%:}"
+	: "${1%%:$s}"; m="${_##*:}"
+	: "${1%%$m:$s}"; h="${_%:}"
 }
 
 notify_complete(){
-	printf '\r\e[K%s\e[m\n' "times up!"
+	printf '\r\e[K%s\e[m\n\e[?25h' "times up!"
 	notify-send "${0//$HOME/\~}: $_"
-	play_bell &>/dev/null
+	bell; read -rs; exit 0
+}
+
+bell(){
+	bell_dir="/usr/share/sounds/freedesktop/stereo"
+	bell="${bell_dir}/alarm-clock-elapsed.oga"
+	command -v paplay &>/dev/null && play_bell
 }
 
 play_bell(){
-	bell_dir="/usr/share/sounds/freedesktop/stereo"
-	bell="${bell_dir}/alarm-clock-elapsed.oga"
-	paplay $bell
+	while wait; do
+		trap 'kill -9 $p' EXIT
+		paplay $bell & p=$!
+	done & bell_pid=$!
 }
 
-timer(){
-	stty -echo; printf '\e[?25l'
-	for ((st=seconds,s=c;s>=0;t=SECONDS,s=c?c-(t-st):t-st)); do
-		printf '\e[1;34m\r%02d:%02d:%02d' "$((s/3600))" "$((s/60%60))" "$((s%60))"
-		sleep 1
-	done
+print_time(){
+	printf '\e[1;34m\r%02d:%02d:%02d' "$((s/3600))" "$((s/60%60))" "$((s%60))"
+	read -st 1
 }
 
 get_opts(){
 	basename="${0##*/}"
 	while [ $1 ]; do
 		case $1 in
-			*[0-9]':'[0-9][0-9]) parse_colons "$1"
-				((c+=(h*3600)+(m*60)+s)) ;;
+			*[0-9]':'[0-9][0-9]) parse_colons "$1"; ((c+=(h*3600)+(m*60)+s)) ;;
 			*[0-9]'h') ((c+=${1%h}*3600)) ;;
 			*[0-9]'m') ((c+=${1%m}*60)) ;;
 			*[0-9]'s') ((c+=${1%s})) ;;
-			*) usage "$1"
+			*) usage "$1"; exit 1
 		esac; shift
 	done
 }
 
 main(){
-	trap "stty echo; printf '\e[?25h'" EXIT
 	get_opts "$@"
-	timer; notify_complete
+	trap 'clean_exit' EXIT
+	stty -echo; printf '\e[?25l'
+	for ((st=seconds,s=c;s>=0;t=SECONDS,s=c?c-(t-st):t-st)){ print_time;}
+	notify_complete
 }
 
 main "$@"
