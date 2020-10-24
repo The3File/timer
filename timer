@@ -10,7 +10,7 @@ usage(){
 }
 
 clean_exit(){
-	stty echo; printf '\e[?25h'
+	printf '\e[?25h'
 	[[ $bell_pid ]] && kill $bell_pid
 }
 
@@ -21,7 +21,7 @@ parse_colons(){
 }
 
 notify_complete(){
-	printf '\r\e[K%s\e[m\n\e[?25h' "times up!"
+	printf '\a\r\e[K%s\e[m\n\e[?25h' "times up!"
 	notify-send "${0//$HOME/\~}: $_"
 	bell; read -rs; exit 0
 }
@@ -60,7 +60,7 @@ get_opts(){
 main(){
 	get_opts "$@"
 	trap 'clean_exit' EXIT
-	stty -echo; printf '\e[?25l'
+	printf '\e[?25l'
 	for ((st=seconds,s=c;s>=0;t=SECONDS,s=c?c-(t-st):t-st)){ print_time;}
 	notify_complete
 }
