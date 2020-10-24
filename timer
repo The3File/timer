@@ -65,7 +65,7 @@ get_opts(){
 main(){
 	get_opts "$@"
 	trap 'clean_exit' EXIT
-	for ((st=seconds,s=c;s>=0;t=SECONDS,s=c?c-(t-st):t-st)){ print_time;}
+	for ((st=SECONDS,s=c;s>=0;t=SECONDS,s=c?c-(t-st):t-st)){ print_time;}
 	notify_complete
 }
 
