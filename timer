@@ -26,7 +26,7 @@ parse_colons(){
 
 notify_complete(){
 	printf '\r\e[K%s\e[m\n' "times up!"
-	notify-send "${0//$HOME/\~}: $_"
+	notify-send "$basename: $_"
 	bell
 }
 
