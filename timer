@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# a timer for measuring time
+# a timer for measuring time - written in pure bash
 # https://github.com/the3file
 
 usage(){ 
