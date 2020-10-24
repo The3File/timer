@@ -33,12 +33,12 @@ sudo make install
 
 ## dependencies
 
+depends on `pulseaudio` for the bell sound for now, might add alsa support,
+but i have no need for it, so create an issue if you really want that.
+
 * `bash`
 * ~~`coreutils`~~
 * `pulseaudio`
-
-depends on `pulseaudio` for the bell sound for now, might add alsa support,
-but i have no need for it, so create an issue if you really want that.
 
 ## links
 http://github.com/dylanaraps/pure-bash-bible
