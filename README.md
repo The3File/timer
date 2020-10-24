@@ -1,11 +1,11 @@
 # timer
 
-a timer for measuring time in `\~50` lines of pure bash
+a timer for measuring time in *`~50`* lines of pure bash
 
 ## advantages
 
 * *almost* no dependencies (*`pulseaudio` for more fancy sound*)
-* small (*only `\~50` lines of code*)
+* small (*only `~50` lines of code*)
 * takes arguments as if they were **candy**
 
 ## usage
