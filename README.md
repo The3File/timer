@@ -4,8 +4,7 @@ a timer for measuring time in `55` lines of pure bash
 
 ## advantages
 
-* simple (*no options, nothing to remember*)
-* *almost* no dependencies (*`pulseaudio` for sound, though*)
+* *almost* no dependencies (*`pulseaudio` for more fancy sound*)
 * small (*only `55` lines of code*)
 * takes arguments as if they were **candy**
 
