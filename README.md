@@ -17,8 +17,9 @@ timer [[<hours>:]<minutes>:<seconds>]
 ```
 
 ## installation
-`make` installs to `/usr/local` by default.
-Install with `make PREFIX=/some/other/path` to change this. 
+`install.bash` installs to `/usr/local` by default.
+to change this set `export PREFIX=/some/other/path`
+before the script. 
 
 ``` bash
 git clone https://github.com/The3File/timer.git
