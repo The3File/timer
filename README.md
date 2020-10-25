@@ -24,7 +24,7 @@ before the script.
 ``` bash
 git clone https://github.com/The3File/timer.git
 cd timer
-sudo . install.bash
+sudo bash -e install
 ```
 > supply `u` to uninstall
 
