@@ -1,5 +1,5 @@
 # timer
-a timer for measuring time in bash
+a timer written in in bash
 
 ## advantages
 * *almost* no dependencies (*`pulseaudio` for more fancy sound*)
