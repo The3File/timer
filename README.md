@@ -2,24 +2,24 @@
 a timer written in in bash
 
 ## advantages
-* *almost* no dependencies (*`pulseaudio` for more fancy sound*)
+* no dependencies other than `bash` (*and `pulseaudio` for more fancy sound*)
 * small (*only `~40` lines of code*)
 * takes arguments as if they were **candy**
 
 ## usage
-find examples in the `man` page
+find documentation in the `man` page
 
 ``` bash
 timer [ARGUMENTS] ...
-
-timer [<number>{h|m|s}]
-timer [[<hours>:]<minutes>:<seconds>]
+# example
+timer 2m 30s
+# or
+timer 2:30
 ```
 
 ## installation
-`install.bash` installs to `/usr/local` by default.
-to change this set `export PREFIX=/some/other/path`
-before the script. 
+`install` installs to `/usr/local` by default.
+`export PREFIX=/some/other/path` to change this
 
 ``` bash
 git clone https://github.com/The3File/timer.git
@@ -29,7 +29,7 @@ sudo bash -e install
 > supply `u` to uninstall
 
 ## dependencies
-depends on `pulseaudio` for a *"higher"* quality bell sound, but uses the built-in terminal bell as a fallback.
+depends on `pulseaudio` for bell sound, but uses the built-in terminal bell as a fallback.
 
 * `bash 4+`
 * ~~`coreutils`~~
