@@ -23,8 +23,9 @@ Install with `make PREFIX=/some/other/path` to change this.
 ``` bash
 git clone https://github.com/The3File/timer.git
 cd timer
-sudo make install
+sudo . install.bash
 ```
+> supply `u` to uninstall
 
 ## dependencies
 depends on `pulseaudio` for a *"higher"* quality bell sound, but uses the built-in terminal bell as a fallback.
