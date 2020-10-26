@@ -1,26 +1,29 @@
 PREFIX="${PREFIX:-/usr/local}"
-exe="${PREFIX}/bin/timer"
-man="${PREFIX}/share/man/man1/timer.1"
 
-new_exe(){ [[ ${exe##*/} -ot $exe ]] ;}
-new_man(){ [[ doc/${man##*/} -ot $man ]] ;}
+bin_dir="${PREFIX}/bin"
+bin="timer"
+
+man_dir="${PREFIX}/share/man/man1"
+man="doc/timer.1"
 
 install(){
-	new_exe || copy ${exe##*/} $exe
-	new_man || copy doc/${man##*/} $man
+	copy  "$bin" "$bin_dir"
+	copy  "$man" "$man_dir"
 }
 
 uninstall(){
-	[[ -x $exe ]] && remove $exe
-	[[ -a $man ]] && remove $man
+	remove "${bin_dir}/${bin##*/}"
+	remove "${man_dir}/${man##*/}"
 }
 
 copy(){
+	[[ "$1" -nt "${2}/${1}" ]] || return
 	cp -rf $1 $2
 	printf '%s\n' "installed to $2"
 }
 
 remove(){
+	[[ -a "$1" ]] || return
 	rm $1
 	printf '%s\n' "uninstalled $1"
 }
