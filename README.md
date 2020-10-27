@@ -11,10 +11,12 @@ find documentation in the `man` page
 
 ``` bash
 timer [ARGUMENTS] ...
-# example
+# example set timer for 2 minutes and 30 seconds
 timer 2m 30s
 # or
 timer 2:30
+# as a stopwatch
+timer
 ```
 
 ## installation
