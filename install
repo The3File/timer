@@ -33,6 +33,6 @@ for bin in bin/*;{ bins+=($bin);}
 for man in man/*/*.[0-9];{ mans+=($man);}
 
 case $1 in
-	u*) uninstall ;;
-	'') install ;;
+	u*) for bin in ${bins[@]};{ uninstall "$bin"; } ;;
+	'') for bin in ${bins[@]};{ install "$bin"; } ;;
 esac
