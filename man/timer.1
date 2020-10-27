@@ -1,0 +1,50 @@
+./" this is a manpage for timer
+.TH TIMER 1 "2020-10-22" "GNU"
+.SH NAME
+.P
+timer - allthough time is an illusion
+.PP
+
+.SH SYNOPSIS
+.P
+.B timer \fR[\fIARGUMENT\fR]...
+.PP
+
+.SH DESCRIPTION
+.P
+Simple timer for measuring time.
+.PP
+
+.SH ARGUMENTS
+.TP
+.B <number>h|m|s
+Set time. Integer followed by specifier. Multiple can be specified.
+.TP
+.B [<hours>:]<minutes>:<seconds>
+Set time. Colon separated. Multiple can be specified.
+.PP
+
+.SH EXAMPLES
+.TP
+.B timer\~\fR1\fI:\fR09
+.TQ
+.B timer\~\fR1\fIm\fR\~9\fIs\fR
+.TQ
+.B timer\~\fR69\fIs\fR
+Set a timer for 1 minute and 9 seconds
+.TP
+.B timer\~\fR4\fIh\~\fR20\fIm
+.TQ
+.B timer\~\fR4\fI:\fR20\fI:\fR00
+Set a timer for for 4 hours and 20 minutes
+.TP
+.B timer\~\fR31\fIm\fR\~47\fI:\fR22\~3\fIh\fR\~38\fIs\fR
+If you want to be stupid
+
+.SH SEE ALSO
+Github repo:
+.br
+https://www.github.com/The3File/timer
+.br
+.P
+Be here now
