@@ -1,44 +1,44 @@
 PREFIX="${PREFIX:-/usr/local}"
+EXCLUDE="LICENSE md install" 
+
 bin_dir="${PREFIX}/bin"
 man_dir="${PREFIX}/share/man/man1"
 
-bins=("timer" "pomodoro" "man/timer.1")
+fail(){ [[ $1 ]] && printf '%s\n' "failed to $1"; exit 1;}
+success(){ printf '%s\n' "$1 $2";}
 
 install(){
-	dir="$bin_dir"
-	[[ ${1%%/*} = man ]] && dir="$man_dir"
-	copy  "$1" "$dir"
+	for bin in ${bins[@]};{
+		copy "$bin" "$bin_dir"
+		success "installed" "$bin_dir/$bin"
+	}
+	for man in ${mans[@]};{ copy "$man" "$man_dir";}
+	success "installed" "$man_dir/${man##*/}"
 }
 
 uninstall(){
-	dir="$bin_dir"
-	[[ ${1%%/*} = man ]] && dir="$man_dir"
-	remove "$dir/$1"
+	for bin in ${bins[@]};{
+		remove "$bin" "$bin_dir"
+		success "uninstalled" "$man_dir/${man##*/}"
+	}
+	for man in ${mans[@]};{ remove "$man" "$man_dir";}
+	success "uninstalled" "$man_dir/${man##*/}"
 }
 
 copy(){
 	[[ "$1" -nt "${2}/${1}" ]] || return
-	cp -rf $1 $2 || return
-	printf '%s\n' "installed $1 to $2"
+	cp -rf $1 $2 || fail
 }
 
 remove(){
-	[[ "$1" ]] || return
-	rm "$1" || return
-	printf '%s\n' "uninstalled $1"
+	[[ "$1" && "$2" ]] || return 1
+	rm "${2}/${1##*/}"|| fail
 }
 
-check_dirs(){
-	for dir in "$@"; do
-		[[ -d $dir ]] && return 0
-		printf '%s\n' "$dir: no such dir"
-		exit 1
-	done
-}
-
-check_dirs "$bin_dir" "$man_dir"
+for bin in *;{ [[ -d "$bin" || "$bin" =~ ${EXCLUDE//\ /\|} ]] || bins+=($bin);}
+for man in */*;{ [[ "$man" =~ .*\.[0-9] ]] && mans+=($man);}
 
 case $1 in
-	u*) for bin in ${bins[@]};{ uninstall "$bin"; } ;;
-	'') for bin in ${bins[@]};{ install "$bin"; } ;;
+	u*) uninstall ;;
+	'') install ;;
 esac
