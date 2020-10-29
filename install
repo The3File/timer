@@ -1,42 +1,44 @@
+# vim: ft=bash
+# vim: ft=sh
+
 PREFIX="${PREFIX:-/usr/local}"
 EXCLUDE="LICENSE md install" 
 
-bin_dir="${PREFIX}/bin"
-man_dir="${PREFIX}/share/man/man1"
+bin_dir="${PREFIX}"
+man_dir="${PREFIX}/share"
 
 fail(){ [[ $1 ]] && printf '%s\n' "failed to $1"; exit 1;}
-success(){ printf '%s\n' "$1 $2";}
+success(){ printf '%s\n' "successfully $1";}
 
 install(){
-	for bin in ${bins[@]};{
-		copy "$bin" "$bin_dir"
-		success "installed" "$bin_dir/$bin"
-	}
-	for man in ${mans[@]};{ copy "$man" "$man_dir";}
-	success "installed" "$man_dir/${man##*/}"
+	for bin in ${bins[@]};{ copy "$bin";}
+	for man in ${mans[@]};{ copy "$man";}
+	success "installed"
 }
 
 uninstall(){
-	for bin in ${bins[@]};{
-		remove "$bin" "$bin_dir"
-		success "uninstalled" "$man_dir/${man##*/}"
-	}
-	for man in ${mans[@]};{ remove "$man" "$man_dir";}
-	success "uninstalled" "$man_dir/${man##*/}"
+	for file in ${bins[@]} ${mans[@]}; do
+		remove "$file"
+	done
+	success "uninstalled"
 }
 
 copy(){
-	[[ "$1" -nt "${2}/${1}" ]] || return
-	cp -rf $1 $2 || fail
+	dest="${PREFIX}/$1"
+	[[ "$dest" -ot "$1" || ! -a $dest ]] || fail "not newer"
+	cp -rf $1 "${dest//man\//share\/man/}" || fail
+	echo $_
 }
 
 remove(){
-	[[ "$1" && "$2" ]] || return 1
-	rm "${2}/${1##*/}"|| fail
+	dest="${PREFIX}/$1"
+	[[ "$dest" ]] || return 1
+	rm "${dest//man\//share\/man/}" || fail $_
+	echo $_
 }
 
-for bin in *;{ [[ -d "$bin" || "$bin" =~ ${EXCLUDE//\ /\|} ]] || bins+=($bin);}
-for man in */*;{ [[ "$man" =~ .*\.[0-9] ]] && mans+=($man);}
+for bin in bin/*;{ bins+=($bin);}
+for man in man/*/*.[0-9];{ mans+=($man);}
 
 case $1 in
 	u*) uninstall ;;

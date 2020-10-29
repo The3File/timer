@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+while getopts ':w:b:s:' o; do
+	case $o in
+		w) work="$OPTARG"; s+=(work) ;;
+		b) break="$OPTARG"; s+=(break) ;;
+		s) ss=$OPTARG ;;
+	esac
+done
+
+for ((c=0,i=0;i<ss*2-1;c=c?0:1,i++)){
+	timer "${!s[c]}"
+	read -rsp $'\e[1;34m\r\e[A\e[J'"${s[c]} done"$'\n'
+}
+
