@@ -2,8 +2,6 @@
 # vim: ft=sh
 
 PREFIX="${PREFIX:-/usr/local}"
-EXCLUDE="LICENSE md install" 
-
 bin_dir="${PREFIX}"
 man_dir="${PREFIX}/share"
 
@@ -26,15 +24,13 @@ uninstall(){
 copy(){
 	dest="${PREFIX}/$1"
 	[[ "$dest" -ot "$1" || ! -a $dest ]] || fail "not newer"
-	cp -rf $1 "${dest//man\//share\/man/}" || fail
-	echo $_
+	cp -rf $1 "${dest//man\//share\/man/}" || fail $_
 }
 
 remove(){
 	dest="${PREFIX}/$1"
 	[[ "$dest" ]] || return 1
 	rm "${dest//man\//share\/man/}" || fail $_
-	echo $_
 }
 
 for bin in bin/*;{ bins+=($bin);}
