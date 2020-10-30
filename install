@@ -1,4 +1,3 @@
-# vim: ft=bash
 # vim: ft=sh
 PREFIX="${PREFIX:-/usr/local}"
 bin_dir="${PREFIX}"
