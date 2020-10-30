@@ -1,6 +1,3 @@
-# vim: ft=bash
-# vim: ft=sh
-
 PREFIX="${PREFIX:-/usr/local}"
 bin_dir="${PREFIX}"
 man_dir="${PREFIX}/share"
