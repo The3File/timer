@@ -13,9 +13,7 @@ install(){
 }
 
 uninstall(){
-	for file in ${bins[@]} ${mans[@]}; do
-		remove "$file"
-	done
+	for file in ${bins[@]} ${mans[@]};{ remove "$file";}
 	success "uninstalled"
 }
 
