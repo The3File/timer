@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 # vim: ft=bash
+=======
+>>>>>>> e899229eb23a2714968834f0b83e338552032bbf
 # vim: ft=sh
 PREFIX="${PREFIX:-/usr/local}"
 bin_dir="${PREFIX}"
@@ -14,9 +17,13 @@ install(){
 }
 
 uninstall(){
+<<<<<<< HEAD
 	for file in ${bins[@]} ${mans[@]}; do
 		remove "$file"
 	done
+=======
+	for file in ${bins[@]} ${mans[@]};{ remove "$file";}
+>>>>>>> e899229eb23a2714968834f0b83e338552032bbf
 	success "uninstalled"
 }
 
@@ -36,6 +43,11 @@ for bin in bin/*;{ [[ -a $bin ]] && bins+=($bin);}
 for man in man/*/*.[0-9];{ [[ -a $man ]] && mans+=($man);}
 
 case $1 in
+<<<<<<< HEAD
 	u*) for bin in ${bins[@]};{ uninstall "$bin"; } ;;
 	'') for bin in ${bins[@]};{ install "$bin"; } ;;
+=======
+	u*) uninstall ;;
+	'') install ;;
+>>>>>>> e899229eb23a2714968834f0b83e338552032bbf
 esac
