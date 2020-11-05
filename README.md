@@ -13,8 +13,8 @@ find documentation in the `man` page
 timer [ARGUMENTS] ...
 # example set timer for 2 minutes and 30 seconds
 timer 2m 30s
-# or
-timer 2:30
+# set an alarm for 16:30
+timer 16:30
 # as a stopwatch
 timer
 ```
