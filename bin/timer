@@ -14,11 +14,11 @@ usage(){
 notify_complete(){
 	printf '\r\e[K%s\e[m\n' "times up!"
 	notify-send "$basename: $_"
-	play_sound || for i in {0..3};{ read -st .15 -p $'\a';}
+	hash paplay &>/dev/null && play_sound
+	for i in {0..3};{ read -st .15 -p $'\a';}
 }
 
 play_sound(){
-	command -v paplay &>/dev/null || return 1
 	sound="/usr/share/sounds/freedesktop/stereo/alarm-clock-elapsed.oga"
 	while wait;do trap 'kill -9 $p' EXIT; paplay $sound & p=$!; done & bell=$!
 	read -rs; exit 0
@@ -29,26 +29,35 @@ print_time(){
 	read -st 1
 }
 
-parse_colons(){ s="${1##*:}";: "${1%%:$s}"; m="${_##*:}";: "${1%%$m:$s}"; h="${_%:}"; }
+parse_colons(){
+	printf -v ch '%(%-H)T' "-1"
+	printf -v cm '%(%-M)T' "-1"
+	printf -v cs '%(%-S)T' "-1"
+
+	m="${1##*:}"; h="${1%%:${1##*:}}"
+	((h=h<12?h+24:h,c=(m*60+h*3600)-(cs+cm*60+ch*3600)))
+}
 
 get_opts(){
 	basename="${0##*/}"
-	while [ $1 ]; do
-		case $1 in
-			*[0-9]':'[0-9][0-9]) parse_colons "$1"; ((c+=(h*3600)+(m*60)+s)) ;;
-			*[0-9]'h') ((c+=${1%h}*3600)) ;;
-			*[0-9]'m') ((c+=${1%m}*60)) ;;
-			*[0-9]'s') ((c+=${1%s})) ;;
-			*) usage "$1"; exit 1
-		esac; shift
-	done
+	while [ $1 ]; do case $1 in
+		*[0-9]':'[0-9][0-9]) parse_colons "$1" ;;
+		*[0-9]'h') ((c+=${1%h}*3600)) ;;
+		*[0-9]'m') ((c+=${1%m}*60)) ;;
+		*[0-9]'s') ((c+=${1%s})) ;;
+		*) usage "$1"; exit 1
+	esac; shift; done
+}
+
+timer(){
+	for ((st=SECONDS,s=c;s>=0;t=SECONDS,s=c?c-(t-st):t-st)){ print_time;}
+	notify_complete
 }
 
 main(){
-	get_opts "$@"
 	trap 'clean_exit' EXIT
-	for ((st=SECONDS,s=c;s>=0;t=SECONDS,s=c?c-(t-st):t-st)){ print_time;}
-	notify_complete
+	get_opts "$@"
+	timer
 }
 
 main "$@"
