@@ -7,7 +7,7 @@ clean_exit(){ [[ $b ]] && kill $b; printf '\e[?25h'; }
 
 usage(){ 
 	printf '%s\n' "$basename: $1: invalid argument"\
-		"usage: $basename [<hrs|mins|secs>{h|m|s}] [[<hrs>:]<mins>:<secs>]"
+		"usage: $basename [<hrs|mins|secs>{h|m|s}] [<hrs>:<mins>]"
 }
 
 notify_complete(){
