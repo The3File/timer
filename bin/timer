@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # a timer for measuring time - written in pure bash
 # https://github.com/the3file
+basename="${0##*/}"
 
-clean_exit(){ [[ $bell ]] && kill $bell; printf '\e[?25h'; }
+clean_exit(){ [[ $b ]] && kill $b; printf '\e[?25h'; }
 
 usage(){ 
 	cat >&2 <<-END
@@ -12,42 +13,37 @@ usage(){
 }
 
 notify_complete(){
-	printf '\r\e[K%s\e[m\n' "times up!"
-	notify-send "$basename: $_"
-	play_sound || for i in {0..3};{ read -st .15 -p $'\a';}
+	printf '\r\e[K%s\e[m\n' "times up!"; notify-send "$basename: $_"
+	hash paplay &>/dev/null && pa_play || term_bell
 }
 
-play_sound(){
-	command -v paplay &>/dev/null || return 1
-	sound="/usr/share/sounds/freedesktop/stereo/alarm-clock-elapsed.oga"
-	while wait;do trap 'kill -9 $p' EXIT; paplay $sound & p=$!; done & bell=$!
+pa_play(){
+	s="/usr/share/sounds/freedesktop/stereo/alarm-clock-elapsed.oga"
+	while wait; do trap 'kill -9 $p' EXIT; paplay $s & p=$!; done & b=$!
 	read -rs; exit 0
 }
 
+term_bell(){ for i in {0..3};{ read -st .15 -p $'\a';};}
+
 print_time(){
 	printf '\e[K\e[?25l\e[1m\r%02d:%02d:%02d' "$((s/3600))" "$((s/60%60))" "$((s%60))"
-	read -st 1
 }
 
-parse_colons(){ s="${1##*:}";: "${1%%:$s}"; m="${_##*:}";: "${1%%$m:$s}"; h="${_%:}"; }
-
-get_opts(){
-	basename="${0##*/}"
-	while [ $1 ]; do
-		case $1 in
-			*[0-9]':'[0-9][0-9]) parse_colons "$1"; ((c+=(h*3600)+(m*60)+s)) ;;
-			*[0-9]'h') ((c+=${1%h}*3600)) ;;
-			*[0-9]'m') ((c+=${1%m}*60)) ;;
-			*[0-9]'s') ((c+=${1%s})) ;;
-			*) usage "$1"; exit 1
-		esac; shift
-	done
+case_opts(){
+	case $1 in
+		*[0-9]':'[0-9][0-9]) IFS=: read -rd '' h m s <<<"${1}"
+			((c+=s?h*3600+m*60+s:h*60+m)) ;;
+		*[0-9]'h') ((c+=${1%h}*3600)) ;;
+		*[0-9]'m') ((c+=${1%m}*60)) ;;
+		*[0-9]'s') ((c+=${1%s})) ;;
+		*) usage "$1"; exit 1
+	esac
 }
 
 main(){
-	get_opts "$@"
 	trap 'clean_exit' EXIT
-	for ((st=SECONDS,s=c;s>=0;t=SECONDS,s=c?c-(t-st):t-st)){ print_time;}
+	while [ $1 ]; do case_opts "$1"; shift; done
+	for ((st=SECONDS,s=c;s>=0;t=SECONDS,s=c?c-(t-st):t-st)){ print_time; read -st 1;}
 	notify_complete
 }
 
