@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
+# example usage as an alarm
 
-printf -v ch '%(%H)T' "-1"
-printf -v cm '%(%M)T' "-1"
-printf -v cs '%(%S)T' "-1"
+[[ "$1" = [0-9][0-9]:[0-9][0-9] ]] ||
+	{ printf '%s\n' "invalid argument '$1'"; exit 1; }
 
-h="${1%%:*}"; : "${1##$h:}"; m="${_%%:*}"
+# split input to vars
+IFS=: read -rd '' ch cm cs < <(printf '%(%H:%M:%S)T' "-1")
+IFS=: read -rd '' h m <<<"$1"
 
-((h=h<ch?(h+24)-ch:h-ch,m=m<cm?60-cm+m:m-cm,s=60-cs))
+#  subtract input from current time
+#+ and fix input being < current time
+#+ - ie. 00:30 if the current time is 23:00
+((h=h<ch?h+24-ch:h-ch,m=m<cm?60-cm+m:m-cm,s=60-cs))
 
-printf -v time '%02d:%02d:%02d' "$h" "$m" "$s"
-
-timer "$time"
+# start timer with remainder
+timer ${h}h ${m}m ${s}s
