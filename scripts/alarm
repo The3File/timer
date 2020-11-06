@@ -7,13 +7,13 @@ xct(){ printf '%s\n' "$1"; exit 1; }
 
 # split input and time to vars
 IFS=: read -rd '' h m ch cm cs < <(printf '%s:%(%-H:%-M:%-S)T' "$1" "-1")
-h=${h#0}
-m=${m#0}
+
+# remove leading zeros
+h=${h#0}; m=${m#0}
 
 # subtract input from current time and fix input being < current time
 ((h=h<ch?h+24-ch:h-ch,h=m<cm?h-1:h))
-((m=m<cm?60-cm+m:m-cm))
-((s=60-cs))
+((m=m<cm?60-cm+m:m-cm,s=60-cs))
 
 # start timer with remainder
 timer ${h}h ${m}m ${s}s
