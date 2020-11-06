@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+h="${1%%:*}"
+: "${1##$h:}"
+m="${_%%:*}"
+
+printf -v ch '%(%H)T' "-1"
+printf -v cm '%(%M)T' "-1"
+printf -v cs '%(%S)T' "-1"
+
+((h=h<ch?(h+24)-ch:h-ch))
+((m=m<cm?60-cm+m:m-cm))
+((s=60-cs))
+
+printf -v time '%02d:%02d:%02d' "$h" "$m" "$s"
+timer "$time"
