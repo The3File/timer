@@ -11,9 +11,8 @@ usage(){
 }
 
 notify_complete(){
-	printf '\r\e[K%s\e[m\n' "times up!"; notify-send "$basename: $_"
-	hash paplay &>/dev/null && pa_play
-	for i in {0..3};{ read -st .15 -p $'\a';}
+	notify-send "$basename: $_"; printf '\r\e[K%s\e[m\n' "times up!"
+	hash paplay &>/dev/null && pa_play || for i in {0..3};{ read -st .15 -p $'\a';}
 }
 
 pa_play(){
@@ -22,7 +21,6 @@ pa_play(){
 	read -rs; exit 0
 }
 
-
 print_time(){
 	printf '\e[K\e[?25l\e[1m\r%02d:%02d:%02d' "$((s/3600))" "$((s/60%60))" "$((s%60))"
 }
@@ -30,8 +28,8 @@ print_time(){
 parse_colons(){
 	IFS=: read -rd '' ch cm cs < <(printf '%(%-H:%-M:%-S)T' "-1")
 	m="${1##*:}"; h="${1%%:$m}"; m=${m#0}; h=${h#0}
-	((h=h<12?h+24:h,h=m<cm?h-1:h,m=m<cm?60-cm+m:m-cm))
-	((c=(60-cs+m*60+h*3600)-(cs+cm*60+ch<12?ch+24:ch*3600)))
+	((h=h<ch?h+24-ch:h-ch,h=m<cm?h-1:h,m=m<cm?60-cm+m:m-cm))
+	((s=60-cs,h*=3600,ch*=3600,m*=60,ch*=60,c=h-ch+m-cm+s))
 }
 
 case_opts(){
