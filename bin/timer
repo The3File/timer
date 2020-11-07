@@ -12,7 +12,7 @@ usage(){
 
 notify_complete(){
 	printf '\r\e[K%s\e[m\n' "times up!"; notify-send "$basename: $_"
-	hash paplay &>/dev/null && pa_play || term_bell
+	hash paplay &>/dev/null && pa_play || for i in {0..3};{ read -st .15 -p $'\a';}
 }
 
 pa_play(){
@@ -21,8 +21,6 @@ pa_play(){
 	read -rs; exit 0
 }
 
-term_bell(){ for i in {0..3};{ read -st .15 -p $'\a';};}
-
 print_time(){
 	printf '\e[K\e[?25l\e[1m\r%02d:%02d:%02d' "$((s/3600))" "$((s/60%60))" "$((s%60))"
 }
@@ -30,7 +28,7 @@ print_time(){
 case_opts(){
 	case $1 in
 		*[0-9]':'[0-9][0-9]) IFS=: read -rd '' h m s <<<"${1}"
-			((c+=s?h*3600+m*60+s:h*60+m)) ;;
+			((h=${h#0},m=${m#0},s=${s#0},c+=s?h*3600+m*60+s:h*60+m)) ;;
 		*[0-9]'h') ((c+=${1%h}*3600)) ;;
 		*[0-9]'m') ((c+=${1%m}*60)) ;;
 		*[0-9]'s') ((c+=${1%s})) ;;
