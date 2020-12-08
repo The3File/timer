@@ -7,5 +7,7 @@ do case $o in
 	s) ss=$OPTARG ;;
 esac; done
 
-for ((c=0,i=0;i<ss*2-1;c=c?0:1,i++)){ timer "${!s[c]}"
-	read -rsp $'\e[1;34m\r\e[A\e[J'"${s[c]} done"$'\n'; }
+for ((c=0,i=0;i<ss*2-1;c=c?0:1,i++)); do
+	timer "${!s[c]}"
+	read -rsp $'\e[1;34m\r\e[A\e[J'"${s[c]} done"$'\n'
+done
