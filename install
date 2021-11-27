@@ -18,7 +18,7 @@ uninstall(){
 
 copy(){
 	local dest="${PREFIX}/$1"
-	[[ -a $dest ]] && [[ "$1" -nt "$dest" ]] || { fail "nothing to do for $1"; return 1;}
+	#[[ -a $dest ]] && [[ "$1" -nt "$dest" ]] || { fail "nothing to do for $1"; return 1;}
 	cp -rf $1 "${dest//man\//share\/man/}" || fail $_
 }
 
