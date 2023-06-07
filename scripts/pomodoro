@@ -8,6 +8,7 @@ do case $o in
 esac; done
 
 for ((c=0,i=0;i<ss*2-1;c=c?0:1,i++)); do
+	printf '\n\e[1;3'$((c+3))'m\r\e[1A\e[J%s\n' "${s[c]} $((i/2+1))"
 	timer "${!s[c]}"
-	read -rsp $'\e[1;34m\r\e[A\e[J'"${s[c]} done"$'\n'
+	read -rsp $'\e[1;3'$((c+3))$'m\r\e[A\e[J'"${s[c]} over, press enter to start ${s[((c?0:1))]}"$'\n'
 done
